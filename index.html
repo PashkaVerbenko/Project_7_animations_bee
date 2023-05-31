@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анімація бджоли з Canvas</title>
+</head>
+<body>
+    <canvas id="canvas" width="200" height="200"></canvas>
+    <script>
+        let canvas = document.getElementById("canvas"); //Шукаємо та зберігаємо елементи canvas
+        let ctx = canvas.getContext("2d");//Отримуємо контекст малювання
+        ctx.lineWidth = 2;
+
+        let circle = function(x, y, radius, fillCircle){
+            ctx.beginPath();//вказуємо шлях
+            ctx.arc(x, y, radius, 0, Math.PI * 2, false);//використовується метод arc - створює коло.
+            if (fillCircle){//перевіряємо, чи аргумент fillCircle має значення true.
+                ctx.fill();//малюємо заповнений кольором коло
+            } else {
+                ctx.stroke();//в іншому випадку малюємо тільки контур.
+            }
+        };
+
+        let drawBee = function(x, y){//drawBee - малюємо бджолу.
+            ctx.lineWidth = 2;//встановлюємо властивості для малювання.
+            ctx.strokeStyle = "Black";//колір для контурів
+            ctx.fillStyle = "Gold";//колір для заливки
+            circle(x, y, 8, true);//малюєна набір кругів.
+            circle(x, y, 8, false);
+            circle(x - 5, y - 11, 5, false);
+            circle(x + 5, y - 11, 5, false);
+            circle(x - 2, y - 1, 2, false);
+            circle(x + 2, y - 1, 2, false);
+        };
+
+        let update = function(coordinate){
+            let offset = Math.random() * 4 - 2;//offset - зміщення. Значення відступу.
+            coordinate += offset;//змінемо координату на величину зміщення.
+            if (coordinate > 200){//перевіряємо, не вилитіла чи бджола за границю холста.
+                coordinate = 200;
+            }
+            if (coordinate < 0){//перевіряємо, не вилитіла чи бджола за границю холста.
+                coordinate = 0;
+            }
+            return coordinate;//вертаємо координату за допомогою return.
+        }
+
+        let x = 100;//початкові координати бджоли.
+        let y = 100;
+        setInterval(function(){
+            ctx.clearRect(0, 0, 200, 200);//зачищаємо холст
+            drawBee(x, y);//малюємо бджолу в позиції (x, y).
+            x = update(x);//обновлюємо значення x i y.
+            y = update(y);
+            ctx.strokeRect(0, 0, 200, 200);//обводимо рамкою границі холсту.
+        }, 30);//час руху в мілісекундах.
+
+    </script>
+</body>
+</html>
